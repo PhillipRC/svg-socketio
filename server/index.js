@@ -20,8 +20,6 @@ app.use(express.static('./'))
 /**
  * Setup Socket.io (ws) Server
  */
-
-// debug logger
 const io = require('socket.io')(3001, {
   cors: {
     origin: 'http://localhost:' + httpPort,
@@ -29,6 +27,7 @@ const io = require('socket.io')(3001, {
   }
 })
 
+// debug logger
 debug('Socket.IO Server listening at ws://localhost:3001')
 
 // send rnd data to clients
