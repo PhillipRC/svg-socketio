@@ -6,6 +6,8 @@ An experiment using socketio
 - npm install
 - npm start
 
+![index screen capture](./client/index.png)
+
 # Debug
 - export DEBUG_COLORS=true
 - export DEBUG=myapp
