@@ -12,3 +12,5 @@ An experiment using socketio
 - export DEBUG_COLORS=true
 - export DEBUG=myapp
 - npm start
+
+![console screen capture](./server/index.png)
