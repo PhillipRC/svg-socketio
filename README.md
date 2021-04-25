@@ -6,6 +6,7 @@ An experiment using socketio
 - npm install
 - npm start
 
+## Browser Output
 ![index screen capture](./client/index.png)
 
 # Debug
@@ -13,4 +14,5 @@ An experiment using socketio
 - export DEBUG=myapp
 - npm start
 
+## Console Output
 ![console screen capture](./server/index.png)
