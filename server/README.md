@@ -1,4 +1,4 @@
-#index.js
+# index.js
 - creates a static web server to serve the project files
 - creates a Socket.io websocket server
   - accepts connections
