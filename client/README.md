@@ -13,3 +13,6 @@
 - creates a SVG container
 - handles messages from server
   - adds data from server to SVG container
+
+# Output
+![index screen capture](./index.png)
