@@ -3,11 +3,14 @@ export default class App {
   constructor(socket, outputElement) {
     console.debug('App:constructor')
 
+    // save reference to the socket
+    this.socket = socket
+
     // create an svg document for the display
-    const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+    this.svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
 
     // set viewbox
-    svg.setAttribute("viewBox", "0 0 1 1");
+    this.svg.setAttribute("viewBox", "0 0 1 1");
 
     // style to fill available space
     const style = "width:100%;" +
@@ -15,22 +18,40 @@ export default class App {
       "position:absolute;" +
       "top:0;" +
       "left:0"
-    svg.setAttribute("style", style)
+    this.svg.setAttribute("style", style)
 
     // append SVG to outputElement
-    outputElement.appendChild(svg);
+    outputElement.appendChild(this.svg);
 
-    // handle update message from server
-    socket.on("update", (data) => {
-      this.handleUpdateMessage(svg, data)
-    })
+    // listen for update message from server
+    this.socket.on("update", this.handleUpdateMessage)
 
+    // listen for click on SVG container
+    this.svg.addEventListener('click', this.handleSvgClick)
+
+  }
+
+  /**
+   * SVG container click handler
+   */
+  handleSvgClick = (event) => {
+    console.debug('App:handleSvgClick')
+    // create a SVG point
+    let point = this.svg.createSVGPoint();
+    point.x = event.clientX;
+    point.y = event.clientY;
+    // get matrix
+    let ctm = this.svg.getScreenCTM().inverse();
+    // transform coordinates
+    point = point.matrixTransform(ctm);
+    // send to server
+    this.socket.emit('update', { x: point.x, y: point.y })
   }
 
   /**
    * Plot the data return as colored circles
    */
-  handleUpdateMessage = (svg, data) => {
+  handleUpdateMessage = (data) => {
     console.debug('App:handleUpdateMessage')
     var circle = document.createElementNS("http://www.w3.org/2000/svg", "circle");
     circle.setAttribute("cx", data.x);
@@ -40,7 +61,7 @@ export default class App {
     const deg = (Math.round(data.c * 360))
     const hsl = "hsl(" + deg + "deg 40% 45%)"
     circle.setAttribute("fill", hsl);
-    svg.appendChild(circle);
+    this.svg.appendChild(circle);
   }
 
 }

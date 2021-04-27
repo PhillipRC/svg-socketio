@@ -30,25 +30,24 @@ const io = require('socket.io')(3001, {
 // debug logger
 debug('Socket.IO Server listening at ws://localhost:3001')
 
-// send rnd data to clients
-function sendRnd() {
-  debug('sendRnd')
+// send out data to clients
+function send(coord) {
+  debug('send')
 
   // bomb out if there are no clients
   if (io.engine.clientsCount === 0) return
 
-  // create rnd data
+  // create data to send
   const data = {
-    x: Math.random(),
-    y: Math.random(),
+    x: coord.x,
+    y: coord.y,
+    // rnd color
     c: Math.random()
   }
 
   // emit the data
   io.emit('update', data)
 
-  // send more rnd data later
-  setTimeout(sendRnd, 100);
 }
 
 /**
@@ -56,8 +55,13 @@ function sendRnd() {
  */
 io.on('connection', socket => {
   debug('connection')
-  socket.emit('connected')
-  // send rnd data
-  sendRnd()
-})
 
+  socket.emit('connected')
+
+  // handle when the client sends data
+  socket.on('update', (data) => {
+    debug('update', data)
+    send({ ...data })
+  })
+
+})
